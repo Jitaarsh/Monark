@@ -4,52 +4,54 @@ import { useState } from 'react';
 export default function OrderSheet({ cart, items, total, onClose, onDone }) {
   const [name, setName] = useState('');
   const [room, setRoom] = useState('');
+  const [phone, setPhone] = useState('');
   const [note, setNote] = useState('');
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
-  const errs = {};
-  if (!name.trim()) errs.name = true;
-  if (!room.trim()) errs.room = true;
-  if (Object.keys(errs).length) return setErrors(errs);
+    const errs = {};
+    if (!name.trim()) errs.name = true;
+    if (!room.trim()) errs.room = true;
+    if (!phone.trim()) errs.phone = true;
+    if (Object.keys(errs).length) return setErrors(errs);
 
-  const payload = {
-    name: name.trim(),
-    room: room.trim(),
-    note: note.trim(),
-    total,
-    items: Object.keys(cart).map(id => ({
-      name: items[id].name,
-      qty: cart[id],
-      price: items[id].price,
-    })),
+    const payload = {
+      name: name.trim(),
+      room: room.trim(),
+      phone: phone.trim(),
+      note: note.trim(),
+      total,
+      items: Object.keys(cart).map(id => ({
+        name: items[id].name,
+        qty: cart[id],
+        price: items[id].price,
+      })),
+    };
+
+    setLoading(true);
+    try {
+      const res = await fetch('/api/order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        alert('Failed to send order. Try again.');
+        return;
+      }
+
+      const data = await res.json();
+      if (data.success) onDone();
+      else alert('Failed to send order. Try again.');
+    } catch (err) {
+      console.error(err);
+      alert('Network error. Your order was NOT sent. Please try again or call reception.');
+    } finally {
+      setLoading(false);
+    }
   };
-
-setLoading(true);
-try {
-  const res = await fetch('/api/order', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  });
-
-  if (!res.ok) {
-    alert('Failed to send order. Try again.');
-    return;
-  }
-
-  const data = await res.json();
-  if (data.success) onDone();
-  else alert('Failed to send order. Try again.');
-
-} catch (err) {
-  console.error(err);
-  alert('Network error. Your order was NOT sent. Please try again or call reception.');
-} finally {
-  setLoading(false);
-}
-};
 
   return (
     <div className="sheet on">
@@ -87,6 +89,16 @@ try {
         onChange={e => { setRoom(e.target.value); setErrors(p => ({...p, room: false})); }}
         placeholder="e.g. 204"
         inputMode="numeric"
+      />
+
+      <label>Phone Number</label>
+      <input
+        type="tel"
+        className={errors.phone ? 'err' : ''}
+        value={phone}
+        onChange={e => { setPhone(e.target.value); setErrors(p => ({...p, phone: false})); }}
+        placeholder="e.g. 98765 43210"
+        inputMode="tel"
       />
 
       <label>Special Instructions (optional)</label>

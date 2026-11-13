@@ -1,6 +1,21 @@
+export const FAST_FOOD_CATEGORIES = new Set([
+  "Mojito",
+  "Ice Tea",
+  "Milkshake",
+  "Garlic Bread",
+  "Pasta",
+  "Sandwich",
+  "Momo",
+  "Pizza",
+  "Wraps / Frankie",
+  "Fries",
+  "Burger"
+]);
+
 export const MENU = [
   {
     cat: "Soups",
+    section: "main",
     ico: "🍲",
     note: "@ 200ml",
     items: [
@@ -12,6 +27,7 @@ export const MENU = [
   },
   {
     cat: "Papad / Fries",
+    section: "main",
     ico: "🥨",
     note: "@ Per Piece",
     items: [
@@ -22,6 +38,7 @@ export const MENU = [
   },
   {
     cat: "Sizzling Sizzler",
+    section: "main",
     ico: "🔥",
     note: "@ 500gms",
     items: [
@@ -32,6 +49,7 @@ export const MENU = [
   },
   {
     cat: "Raita / Salad",
+    section: "main",
     ico: "🥗",
     note: "@ 200gms",
     items: [
@@ -44,6 +62,7 @@ export const MENU = [
   },
   {
     cat: "Tandoori Starter",
+    section: "main",
     ico: "🍢",
     note: "@ 250gms",
     items: [
@@ -54,6 +73,7 @@ export const MENU = [
   },
   {
     cat: "Soya Chap",
+    section: "main",
     ico: "🌿",
     note: "@ 250gms",
     items: [
@@ -64,6 +84,7 @@ export const MENU = [
   },
   {
     cat: "Indian Starter",
+    section: "main",
     ico: "🫕",
     note: "@ 250gms",
     items: [
@@ -73,6 +94,7 @@ export const MENU = [
   },
   {
     cat: "Chinese Starter",
+    section: "main",
     ico: "🥢",
     note: "@ 250gms",
     items: [
@@ -85,6 +107,7 @@ export const MENU = [
   },
   {
     cat: "Continental Starter",
+    section: "main",
     ico: "🧀",
     note: "@ 250gms",
     items: [
@@ -95,6 +118,7 @@ export const MENU = [
   },
   {
     cat: "Fresh Veg Tadka",
+    section: "main",
     ico: "🥘",
     note: "@ 300gms",
     items: [
@@ -108,6 +132,7 @@ export const MENU = [
   },
   {
     cat: "Paneer Ka Zayka",
+    section: "main",
     ico: "🧆",
     note: "@ 300gms",
     items: [
@@ -122,6 +147,7 @@ export const MENU = [
   },
   {
     cat: "Varieties of Kofta",
+    section: "main",
     ico: "🫧",
     note: "@ 300gms",
     items: [
@@ -132,6 +158,7 @@ export const MENU = [
   },
   {
     cat: "Varieties of Aloo",
+    section: "main",
     ico: "🥔",
     note: "@ 300gms",
     items: [
@@ -142,6 +169,7 @@ export const MENU = [
   },
   {
     cat: "Kathiyawadi",
+    section: "main",
     ico: "🌾",
     note: "@ 300gms",
     items: [
@@ -153,6 +181,7 @@ export const MENU = [
   },
   {
     cat: "Varieties of Kaju / Cheese",
+    section: "main",
     ico: "💎",
     note: "@ 300gms",
     items: [
@@ -165,6 +194,7 @@ export const MENU = [
   },
   {
     cat: "Varieties of Dal",
+    section: "main",
     ico: "🫘",
     note: "@ 300gms",
     items: [
@@ -175,6 +205,7 @@ export const MENU = [
   },
   {
     cat: "Varieties of Rice",
+    section: "main",
     ico: "🍚",
     note: "@ 300gms",
     items: [
@@ -187,6 +218,7 @@ export const MENU = [
   },
   {
     cat: "Indian Bread",
+    section: "main",
     ico: "🫓",
     note: "@ Per Piece",
     items: [
@@ -203,6 +235,7 @@ export const MENU = [
   },
   {
     cat: "Chinese",
+    section: "main",
     ico: "🍜",
     note: "@ 300gms",
     items: [
@@ -216,6 +249,7 @@ export const MENU = [
   },
   {
     cat: "Mojito",
+    section: "fastfood",
     ico: "🍹",
     items: [
       ["Blue Heaven Mojito", "Cool blue mojito with mint", 99, 1],
@@ -226,6 +260,7 @@ export const MENU = [
   },
   {
     cat: "Ice Tea",
+    section: "fastfood",
     ico: "🧊",
     items: [
       ["Lemon Ice Tea", "Chilled lemon infused ice tea", 99, 1],
@@ -234,6 +269,7 @@ export const MENU = [
   },
   {
     cat: "Milkshake",
+    section: "fastfood",
     ico: "🥤",
     items: [
       ["Oreo Chocolate Shake", "Oreo blended chocolate shake", 109, 1],
@@ -244,6 +280,7 @@ export const MENU = [
   },
   {
     cat: "Garlic Bread",
+    section: "fastfood",
     ico: "🥖",
     items: [
       ["Cheese Garlic Bread", "Classic cheesy garlic bread", 89, 1],
@@ -253,6 +290,7 @@ export const MENU = [
   },
   {
     cat: "Pasta",
+    section: "fastfood",
     ico: "🍝",
     items: [
       ["White Sauce Pasta", "Creamy bechamel pasta", 169, 1],
@@ -262,6 +300,7 @@ export const MENU = [
   },
   {
     cat: "Sandwich",
+    section: "fastfood",
     ico: "🥪",
     note: "@ Per Plate",
     items: [
@@ -271,6 +310,7 @@ export const MENU = [
   },
   {
     cat: "Momo",
+    section: "fastfood",
     ico: "🥟",
     items: [
       ["Steam Momo", "Soft steamed veg momos", 89, 1],
@@ -280,6 +320,7 @@ export const MENU = [
   },
   {
     cat: "Pizza",
+    section: "fastfood",
     ico: "🍕",
     items: [
       ["Margherita Pizza", "Classic tomato & cheese pizza", 109, 1],
@@ -291,6 +332,7 @@ export const MENU = [
   },
   {
     cat: "Wraps / Frankie",
+    section: "fastfood",
     ico: "🌯",
     items: [
       ["Mexican Salsa Wrap", "Spiced Mexican veg wrap", 129, 1],
@@ -299,6 +341,7 @@ export const MENU = [
   },
   {
     cat: "Fries",
+    section: "fastfood",
     ico: "🍟",
     items: [
       ["Crispy Fries", "Salted or Peri Peri option", 99, 1],
@@ -307,6 +350,7 @@ export const MENU = [
   },
   {
     cat: "Burger",
+    section: "fastfood",
     ico: "🍔",
     items: [
       ["Classic OG Burger", "Simple classic veg burger", 69, 1],
@@ -316,6 +360,7 @@ export const MENU = [
   },
   {
     cat: "Ice Cream & Desserts",
+    section: "main",
     ico: "🍨",
     items: [
       ["Gulab Jamun (2 Piece)", "Soft gulab jamun", 40, 1],

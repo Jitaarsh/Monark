@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect, useMemo, useRef } from 'react';
+import Image from 'next/image';
 import { MENU } from '@/data/menu';
 import OrderSheet from '@/components/OrderSheet';
 
@@ -8,7 +9,20 @@ type CartItem = { name: string; price: number };
 export default function Home() {
   const [cart, setCart] = useState<Record<string, number>>({});
   const [searchQuery, setSearchQuery] = useState('');
+  const [activeSection, setActiveSection] = useState<'main' | 'fastfood'>('main');
   const ribbonRef = useRef<HTMLDivElement>(null);
+
+  const mainCategories = useMemo(() =>
+    MENU.map((c, i) => ({ ...c, originalIndex: i })).filter(c => c.section === 'main'),
+    []
+  );
+
+  const fastFoodCategories = useMemo(() =>
+    MENU.map((c, i) => ({ ...c, originalIndex: i })).filter(c => c.section === 'fastfood'),
+    []
+  );
+
+  const displayedCategories = activeSection === 'main' ? mainCategories : fastFoodCategories;
 
   const items = useMemo(() => {
     const map: Record<string, CartItem> = {};
@@ -26,6 +40,8 @@ export default function Home() {
       raw: [string, string, number, number];
       catName: string;
       catIco: string;
+      section: 'main' | 'fastfood';
+      originalIndex: number;
     }> = [];
     MENU.forEach((c, ci) => {
       c.items.forEach((it, ii) => {
@@ -34,6 +50,8 @@ export default function Home() {
           raw: it as [string, string, number, number],
           catName: c.cat,
           catIco: c.ico,
+          section: (c.section as 'main' | 'fastfood') || 'main',
+          originalIndex: ci,
         });
       });
     });
@@ -51,16 +69,18 @@ export default function Home() {
     );
   }, [searchQuery, searchableItems]);
 
-  const [sheetOpen, setSheetOpen]   = useState(false);
+  const [sheetOpen, setSheetOpen] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
-  const [activeTab, setActiveTab]   = useState(0);
+  const [activeTab, setActiveTab] = useState(0);
   const [revealedCards, setRevealedCards] = useState<Set<string>>(() => new Set());
   const [done, setDone] = useState(false);
 
-  /* Scroll-spy — update activeTab as user scrolls */
+  /* Scroll-spy — update activeTab as user scrolls within active section */
   useEffect(() => {
     if (searchQuery.trim()) return;
-    const sections = MENU.map((_, i) => document.getElementById(`c${i}`)).filter(Boolean) as HTMLElement[];
+    const sections = displayedCategories
+      .map(c => document.getElementById(`c${c.originalIndex}`))
+      .filter(Boolean) as HTMLElement[];
     if (!sections.length) return;
 
     const obs = new IntersectionObserver(
@@ -78,9 +98,9 @@ export default function Home() {
     );
     sections.forEach(s => obs.observe(s));
     return () => obs.disconnect();
-  }, [searchQuery]);
+  }, [searchQuery, displayedCategories]);
 
-  /* Auto-scroll active pill into view */
+  /* Auto-scroll active pill into view in horizontal ribbon */
   useEffect(() => {
     if (ribbonRef.current) {
       const activeEl = ribbonRef.current.querySelector<HTMLElement>('.cat-pill.active');
@@ -114,9 +134,9 @@ export default function Home() {
     );
     document.querySelectorAll('.card').forEach(card => observer.observe(card));
     return () => observer.disconnect();
-  }, [searchQuery]);
+  }, [searchQuery, displayedCategories]);
 
-  const handleDone  = () => { setDone(true); setSheetOpen(false); };
+  const handleDone = () => { setDone(true); setSheetOpen(false); };
   const handleAgain = () => { setDone(false); setCart({}); };
 
   const setQ = (id: string, q: number) => {
@@ -128,12 +148,27 @@ export default function Home() {
     });
   };
 
-  const jumpTo = (i: number) => {
+  const switchSection = (sec: 'main' | 'fastfood') => {
+    setActiveSection(sec);
+    const targetCats = sec === 'main' ? mainCategories : fastFoodCategories;
+    if (targetCats.length > 0) {
+      setActiveTab(targetCats[0].originalIndex);
+    }
+    if (ribbonRef.current) {
+      ribbonRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+    }
+  };
+
+  const jumpTo = (originalIndex: number) => {
+    const targetCat = MENU[originalIndex];
+    if (targetCat && targetCat.section && targetCat.section !== activeSection) {
+      setActiveSection(targetCat.section as 'main' | 'fastfood');
+    }
     if (searchQuery) setSearchQuery('');
     setPickerOpen(false);
-    setActiveTab(i);
+    setActiveTab(originalIndex);
     setTimeout(() => {
-      document.getElementById(`c${i}`)?.scrollIntoView({ behavior: 'smooth' });
+      document.getElementById(`c${originalIndex}`)?.scrollIntoView({ behavior: 'smooth' });
     }, 60);
   };
 
@@ -143,7 +178,7 @@ export default function Home() {
   const renderCard = (
     id: string,
     it: [string, string, number, number],
-    catBadge?: { ico: string; name: string }
+    catBadge?: { ico: string; name: string; section?: 'main' | 'fastfood' }
   ) => {
     const selected = !!cart[id];
     const isRevealed = revealedCards.has(id) || !!searchQuery.trim();
@@ -156,7 +191,7 @@ export default function Home() {
       >
         <div className="info">
           {catBadge && (
-            <span className="item-cat-badge">
+            <span className={`item-cat-badge ${catBadge.section === 'fastfood' ? 'fast' : 'main'}`}>
               {catBadge.ico} {catBadge.name}
             </span>
           )}
@@ -172,7 +207,7 @@ export default function Home() {
             type="checkbox"
             className="chk"
             checked={selected}
-            onChange={() => {}}
+            onChange={() => { }}
             onClick={e => e.stopPropagation()}
             aria-label={`Select ${it[0]}`}
           />
@@ -209,30 +244,22 @@ export default function Home() {
     <>
       {/* HERO */}
       <header className="hero">
-        <svg width="0" height="0" style={{ position: 'absolute' }}>
-          <defs>
-            <symbol id="leaf" viewBox="0 0 100 100">
-              <circle cx="50" cy="50" r="48" fill="#fff" stroke="#0b5a43" strokeWidth="3"/>
-              <g stroke="#0b5a43" strokeWidth="4" fill="none" strokeLinecap="round">
-                <path d="M50 88V22"/><path d="M50 88C34 72 30 46 38 26"/>
-                <path d="M50 88C66 72 70 46 62 26"/><path d="M50 88C26 76 16 56 20 36"/>
-                <path d="M50 88C74 76 84 56 80 36"/>
-              </g>
-            </symbol>
-          </defs>
-        </svg>
         <svg className="arches" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
-          <path d="M30 300V120a45 45 0 0 1 90 0V300M75 300V80M120 300V190a60 60 0 0 1 120 0V300M280 300V90a40 40 0 0 1 80 0V300M320 300V60"/>
+          <path d="M30 300V120a45 45 0 0 1 90 0V300M75 300V80M120 300V190a60 60 0 0 1 120 0V300M280 300V90a40 40 0 0 1 80 0V300M320 300V60" />
         </svg>
-        <div className="orb o1"><svg><use href="#leaf"/></svg></div>
-        <div className="orb o2"><svg><use href="#leaf"/></svg></div>
+        <div className="orb o1">
+          <Image src="/logo-left.png" alt="Hotel Monark Emblem (Left)" width={66} height={66} priority />
+        </div>
+        <div className="orb o2">
+          <Image src="/logo-right.png" alt="Hotel Monark Emblem (Right)" width={56} height={56} priority />
+        </div>
         <div className="hero-in">
           <div className="brand"><small>Hotel</small>Monark</div>
           <div className="pill">AC ROOMS</div>
           <p className="tag">In-Room Dining · Pick your dishes, we <b>deliver to your room</b></p>
         </div>
         <svg className="wave" viewBox="0 0 1440 70" preserveAspectRatio="none">
-          <path fill="#f5fbf6" d="M0 40C240 80 480 0 720 30s480 40 720 0v40H0z"/>
+          <path fill="#f5fbf6" d="M0 40C240 80 480 0 720 30s480 40 720 0v40H0z" />
         </svg>
       </header>
 
@@ -272,16 +299,44 @@ export default function Home() {
             </button>
           </div>
 
+          {/* TWO PRIMARY SECTIONS: MAIN COURSE & FAST FOOD */}
+          {!searchQuery && (
+            <div className="section-switcher" role="tablist" aria-label="Menu Sections">
+              <button
+                type="button"
+                role="tab"
+                aria-selected={activeSection === 'main'}
+                className={`sec-tab ${activeSection === 'main' ? 'active main-active' : ''}`}
+                onClick={() => switchSection('main')}
+              >
+                <span className="sec-ico">🍽️</span>
+                <span className="sec-label">Main Course</span>
+                <span className="sec-pill">{mainCategories.length}</span>
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={activeSection === 'fastfood'}
+                className={`sec-tab ${activeSection === 'fastfood' ? 'active fast-active' : ''}`}
+                onClick={() => switchSection('fastfood')}
+              >
+                <span className="sec-ico">🍔</span>
+                <span className="sec-label">Fast Food</span>
+                <span className="sec-pill">{fastFoodCategories.length}</span>
+              </button>
+            </div>
+          )}
+
           {!searchQuery && (
             <div className="cat-ribbon" ref={ribbonRef} role="tablist">
-              {MENU.map((c, i) => (
+              {displayedCategories.map(c => (
                 <button
-                  key={i}
+                  key={c.originalIndex}
                   type="button"
                   role="tab"
-                  aria-selected={activeTab === i}
-                  className={`cat-pill ${activeTab === i ? 'active' : ''}`}
-                  onClick={() => jumpTo(i)}
+                  aria-selected={activeTab === c.originalIndex}
+                  className={`cat-pill ${activeTab === c.originalIndex ? 'active' : ''}`}
+                  onClick={() => jumpTo(c.originalIndex)}
                 >
                   <span className="pill-ico">{c.ico}</span>
                   <span className="pill-name">{c.cat}</span>
@@ -313,22 +368,23 @@ export default function Home() {
             {filteredItems.length === 0 ? (
               <div className="empty-search">
                 <p>No dishes found matching &ldquo;{searchQuery}&rdquo;.</p>
-                <small>Try searching for &quot;soup&quot;, &quot;paneer&quot;, &quot;roti&quot;, &quot;dal&quot;, or &quot;sizzler&quot;.</small>
+                <small>Try searching for &quot;soup&quot;, &quot;paneer&quot;, &quot;roti&quot;, &quot;dal&quot;, or &quot;pizza&quot;.</small>
               </div>
             ) : (
               <div className="menu-grid">
                 {filteredItems.map(item =>
                   renderCard(item.id, item.raw, {
                     ico: item.catIco,
-                    name: item.catName,
+                    name: `${item.section === 'fastfood' ? '🍔 Fast Food' : '🍽️ Main'} · ${item.catName}`,
+                    section: item.section,
                   })
                 )}
               </div>
             )}
           </section>
         ) : (
-          MENU.map((c, ci) => (
-            <section key={ci} id={`c${ci}`}>
+          displayedCategories.map(c => (
+            <section key={c.originalIndex} id={`c${c.originalIndex}`}>
               <div className="sec-header">
                 <h2>
                   {c.ico} {c.cat}
@@ -338,7 +394,7 @@ export default function Home() {
               </div>
               <div className="menu-grid">
                 {c.items.map((it, ii) => {
-                  const id = `${ci}-${ii}`;
+                  const id = `${c.originalIndex}-${ii}`;
                   return renderCard(id, it as [string, string, number, number]);
                 })}
               </div>
@@ -383,12 +439,35 @@ export default function Home() {
               <span>Browse Categories</span>
               <button className="x" onClick={() => setPickerOpen(false)}>×</button>
             </div>
+
+            <div className="picker-group-title">
+              <span>🍽️ Main Course</span>
+              <span className="pcat-count">{mainCategories.length} categories</span>
+            </div>
             <div className="picker-grid">
-              {MENU.map((c, i) => (
+              {mainCategories.map(c => (
                 <button
-                  key={i}
-                  className={`pcat ${activeTab === i ? 'pcat-on' : ''}`}
-                  onClick={() => jumpTo(i)}
+                  key={c.originalIndex}
+                  className={`pcat ${activeTab === c.originalIndex ? 'pcat-on' : ''}`}
+                  onClick={() => jumpTo(c.originalIndex)}
+                >
+                  <span className="pcat-ico">{c.ico}</span>
+                  <span className="pcat-label">{c.cat}</span>
+                  <span className="pcat-count">{c.items.length} items</span>
+                </button>
+              ))}
+            </div>
+
+            <div className="picker-group-title fast">
+              <span>🍔 Fast Food</span>
+              <span className="pcat-count">{fastFoodCategories.length} categories</span>
+            </div>
+            <div className="picker-grid">
+              {fastFoodCategories.map(c => (
+                <button
+                  key={c.originalIndex}
+                  className={`pcat ${activeTab === c.originalIndex ? 'pcat-on' : ''}`}
+                  onClick={() => jumpTo(c.originalIndex)}
                 >
                   <span className="pcat-ico">{c.ico}</span>
                   <span className="pcat-label">{c.cat}</span>
@@ -404,7 +483,7 @@ export default function Home() {
         <div className="done on">
           <div className="tick">
             <svg viewBox="0 0 52 52">
-              <path d="M12 27l10 10 19-21" stroke="#07402f" strokeWidth="6" fill="none" strokeLinecap="round"/>
+              <path d="M12 27l10 10 19-21" stroke="#07402f" strokeWidth="6" fill="none" strokeLinecap="round" />
             </svg>
           </div>
           <h2>Order Placed!</h2>
