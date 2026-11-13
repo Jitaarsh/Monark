@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { MENU } from '@/data/menu';
 import OrderSheet from '@/components/OrderSheet';
 
@@ -7,6 +7,9 @@ type CartItem = { name: string; price: number };
 
 export default function Home() {
   const [cart, setCart] = useState<Record<string, number>>({});
+  const [searchQuery, setSearchQuery] = useState('');
+  const ribbonRef = useRef<HTMLDivElement>(null);
+
   const items = useMemo(() => {
     const map: Record<string, CartItem> = {};
     MENU.forEach((c, ci) =>
@@ -17,6 +20,37 @@ export default function Home() {
     return map;
   }, []);
 
+  const searchableItems = useMemo(() => {
+    const list: Array<{
+      id: string;
+      raw: [string, string, number, number];
+      catName: string;
+      catIco: string;
+    }> = [];
+    MENU.forEach((c, ci) => {
+      c.items.forEach((it, ii) => {
+        list.push({
+          id: `${ci}-${ii}`,
+          raw: it as [string, string, number, number],
+          catName: c.cat,
+          catIco: c.ico,
+        });
+      });
+    });
+    return list;
+  }, []);
+
+  const filteredItems = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return [];
+    return searchableItems.filter(
+      item =>
+        item.raw[0].toLowerCase().includes(q) ||
+        item.raw[1].toLowerCase().includes(q) ||
+        item.catName.toLowerCase().includes(q)
+    );
+  }, [searchQuery, searchableItems]);
+
   const [sheetOpen, setSheetOpen]   = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
   const [activeTab, setActiveTab]   = useState(0);
@@ -25,21 +59,40 @@ export default function Home() {
 
   /* Scroll-spy — update activeTab as user scrolls */
   useEffect(() => {
-    const sections = MENU.map((_, i) => document.getElementById(`c${i}`));
+    if (searchQuery.trim()) return;
+    const sections = MENU.map((_, i) => document.getElementById(`c${i}`)).filter(Boolean) as HTMLElement[];
+    if (!sections.length) return;
+
     const obs = new IntersectionObserver(
       entries => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            const idx = sections.indexOf(e.target as HTMLElement);
-            if (idx !== -1) setActiveTab(idx);
-          }
-        });
+        const visible = entries
+          .filter(e => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+        if (visible.length > 0) {
+          const id = visible[0].target.id;
+          const idx = parseInt(id.replace('c', ''), 10);
+          if (!isNaN(idx)) setActiveTab(idx);
+        }
       },
-      { threshold: 0.3 }
+      { rootMargin: '-100px 0px -60% 0px', threshold: 0 }
     );
-    sections.forEach(s => s && obs.observe(s));
+    sections.forEach(s => obs.observe(s));
     return () => obs.disconnect();
-  }, []);
+  }, [searchQuery]);
+
+  /* Auto-scroll active pill into view */
+  useEffect(() => {
+    if (ribbonRef.current) {
+      const activeEl = ribbonRef.current.querySelector<HTMLElement>('.cat-pill.active');
+      if (activeEl) {
+        activeEl.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest',
+          inline: 'center',
+        });
+      }
+    }
+  }, [activeTab]);
 
   /* Card reveal animation */
   useEffect(() => {
@@ -57,11 +110,11 @@ export default function Home() {
           setRevealedCards(previous => new Set([...previous, ...visibleIds]));
         }
       },
-      { threshold: 0, rootMargin: '0px 0px -20px 0px' }
+      { threshold: 0, rootMargin: '60px 0px 0px 0px' }
     );
     document.querySelectorAll('.card').forEach(card => observer.observe(card));
     return () => observer.disconnect();
-  }, []);
+  }, [searchQuery]);
 
   const handleDone  = () => { setDone(true); setSheetOpen(false); };
   const handleAgain = () => { setDone(false); setCart({}); };
@@ -76,15 +129,81 @@ export default function Home() {
   };
 
   const jumpTo = (i: number) => {
+    if (searchQuery) setSearchQuery('');
     setPickerOpen(false);
     setActiveTab(i);
     setTimeout(() => {
       document.getElementById(`c${i}`)?.scrollIntoView({ behavior: 'smooth' });
-    }, 80);
+    }, 60);
   };
 
   const total = Object.keys(cart).reduce((s, k) => s + (items[k]?.price || 0) * cart[k], 0);
   const count = Object.values(cart).reduce((a, b) => a + b, 0);
+
+  const renderCard = (
+    id: string,
+    it: [string, string, number, number],
+    catBadge?: { ico: string; name: string }
+  ) => {
+    const selected = !!cart[id];
+    const isRevealed = revealedCards.has(id) || !!searchQuery.trim();
+    return (
+      <div
+        key={id}
+        data-card-id={id}
+        className={`card ${isRevealed ? 'show' : ''} ${selected ? 'sel' : ''}`}
+        onClick={() => setQ(id, selected ? 0 : 1)}
+      >
+        <div className="info">
+          {catBadge && (
+            <span className="item-cat-badge">
+              {catBadge.ico} {catBadge.name}
+            </span>
+          )}
+          <div className="nm">
+            <i className={`dot ${it[3] ? '' : 'nv'}`} />
+            {it[0]}
+          </div>
+          {it[1] ? <div className="ds">{it[1]}</div> : null}
+          <div className="pr">{it[2]}</div>
+        </div>
+        <div className="side">
+          <input
+            type="checkbox"
+            className="chk"
+            checked={selected}
+            onChange={() => {}}
+            onClick={e => e.stopPropagation()}
+            aria-label={`Select ${it[0]}`}
+          />
+          <div
+            className="qty"
+            aria-hidden={!selected}
+            inert={!selected}
+            onClick={e => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              tabIndex={selected ? 0 : -1}
+              onClick={() => setQ(id, (cart[id] || 1) - 1)}
+              aria-label="Decrease quantity"
+            >
+              −
+            </button>
+            <span>{cart[id] || 1}</span>
+            <button
+              type="button"
+              tabIndex={selected ? 0 : -1}
+              onClick={() => setQ(id, (cart[id] || 1) + 1)}
+              aria-label="Increase quantity"
+            >
+              +
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <>
@@ -117,63 +236,115 @@ export default function Home() {
         </svg>
       </header>
 
-      {/* Sticky mini-bar: current category + browse button */}
-      <div className="catbar">
-        <span className="catbar-current">
-          {MENU[activeTab].ico} {MENU[activeTab].cat}
-        </span>
-        <button className="catbar-btn" onClick={() => setPickerOpen(true)}>
-          ☰ All Categories
-        </button>
-      </div>
+      {/* STICKY QUICK-ACCESS NAVIGATION */}
+      <nav className="sticky-nav" aria-label="Menu Navigation">
+        <div className="sticky-nav-inner">
+          <div className="nav-actions">
+            <div className="search-wrap">
+              <span className="search-icon">🔍</span>
+              <input
+                type="text"
+                className="search-input"
+                placeholder="Search dishes (e.g. Tomato Soup, Paneer, Pizza)..."
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                aria-label="Search dishes"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  className="search-clear"
+                  onClick={() => setSearchQuery('')}
+                  aria-label="Clear search"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+            <button
+              type="button"
+              className="all-cats-btn"
+              onClick={() => setPickerOpen(true)}
+              aria-label="View all categories"
+            >
+              <span>☰ All</span>
+              <span className="badge">{MENU.length}</span>
+            </button>
+          </div>
+
+          {!searchQuery && (
+            <div className="cat-ribbon" ref={ribbonRef} role="tablist">
+              {MENU.map((c, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  role="tab"
+                  aria-selected={activeTab === i}
+                  className={`cat-pill ${activeTab === i ? 'active' : ''}`}
+                  onClick={() => jumpTo(i)}
+                >
+                  <span className="pill-ico">{c.ico}</span>
+                  <span className="pill-name">{c.cat}</span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </nav>
 
       {/* MENU */}
       <main id="menu">
-        {MENU.map((c, ci) => (
-          <section key={ci} id={`c${ci}`}>
-            <h2>{c.ico} {c.cat}{c.note ? <small className="catnote">{c.note}</small> : null}</h2>
-            {c.items.map((it, ii) => {
-              const id = `${ci}-${ii}`;
-              const selected = !!cart[id];
-              return (
-                <div
-                  key={ii}
-                  data-card-id={id}
-                  className={`card ${revealedCards.has(id) ? 'show' : ''} ${selected ? 'sel' : ''}`}
-                  onClick={() => setQ(id, selected ? 0 : 1)}
-                >
-                  <div className="info">
-                    <div className="nm">
-                      <i className={`dot ${it[3] ? '' : 'nv'}`}></i>
-                      {it[0]}
-                    </div>
-                    <div className="ds">{it[1]}</div>
-                    <div className="pr">{it[2]}</div>
-                  </div>
-                  <div className="side">
-                    <input
-                      type="checkbox"
-                      className="chk"
-                      checked={selected}
-                      onChange={() => {}}
-                      onClick={e => e.stopPropagation()}
-                    />
-                    <div
-                      className="qty"
-                      aria-hidden={!selected}
-                      inert={!selected}
-                      onClick={e => e.stopPropagation()}
-                    >
-                      <button tabIndex={selected ? 0 : -1} onClick={() => setQ(id, (cart[id] || 1) - 1)}>−</button>
-                      <span>{cart[id] || 1}</span>
-                      <button tabIndex={selected ? 0 : -1} onClick={() => setQ(id, (cart[id] || 1) + 1)}>+</button>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+        {searchQuery.trim() ? (
+          <section className="search-results-section">
+            <div className="search-header-box">
+              <h2>
+                🔍 Results for &ldquo;{searchQuery}&rdquo;
+                <small className="catnote">{filteredItems.length} found</small>
+              </h2>
+              <button
+                type="button"
+                className="clear-search-btn"
+                onClick={() => setSearchQuery('')}
+              >
+                Clear Search
+              </button>
+            </div>
+
+            {filteredItems.length === 0 ? (
+              <div className="empty-search">
+                <p>No dishes found matching &ldquo;{searchQuery}&rdquo;.</p>
+                <small>Try searching for &quot;soup&quot;, &quot;paneer&quot;, &quot;roti&quot;, &quot;dal&quot;, or &quot;sizzler&quot;.</small>
+              </div>
+            ) : (
+              <div className="menu-grid">
+                {filteredItems.map(item =>
+                  renderCard(item.id, item.raw, {
+                    ico: item.catIco,
+                    name: item.catName,
+                  })
+                )}
+              </div>
+            )}
           </section>
-        ))}
+        ) : (
+          MENU.map((c, ci) => (
+            <section key={ci} id={`c${ci}`}>
+              <div className="sec-header">
+                <h2>
+                  {c.ico} {c.cat}
+                  {c.note ? <small className="catnote">{c.note}</small> : null}
+                  <span className="catcount">{c.items.length} dishes</span>
+                </h2>
+              </div>
+              <div className="menu-grid">
+                {c.items.map((it, ii) => {
+                  const id = `${ci}-${ii}`;
+                  return renderCard(id, it as [string, string, number, number]);
+                })}
+              </div>
+            </section>
+          ))
+        )}
       </main>
 
       <footer>
@@ -221,6 +392,7 @@ export default function Home() {
                 >
                   <span className="pcat-ico">{c.ico}</span>
                   <span className="pcat-label">{c.cat}</span>
+                  <span className="pcat-count">{c.items.length} items</span>
                 </button>
               ))}
             </div>
