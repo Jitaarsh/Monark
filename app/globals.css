@@ -1,0 +1,86 @@
+:root{--g:#0b5a43;--g2:#12805e;--gd:#07402f;--y:#f7b500;--y2:#ffd65a;--bg:#f5fbf6;--ink:#17332a;--mut:#6b8278;--r:20px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{font-family:Poppins,system-ui,sans-serif;background:var(--bg);color:var(--ink);padding-bottom:110px}
+h1,h2,.brand{font-family:"Abril Fatface",Georgia,serif;font-weight:400}
+.hero{position:relative;background:var(--g);color:#fff;text-align:center;padding:56px 20px 110px;overflow:hidden}
+.hero svg.arches{position:absolute;inset:0;width:100%;height:100%;opacity:.5}
+.arches path{fill:none;stroke:var(--gd);stroke-width:2;stroke-dasharray:1200;stroke-dashoffset:1200;animation:draw 3s ease forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.orb{position:absolute;border-radius:50%;display:grid;place-items:center;animation:float 5s ease-in-out infinite}
+.orb svg{width:62%;height:62%}
+.orb.o1{width:84px;height:84px;background:var(--y);left:6%;top:28px;border:6px solid var(--y)}
+.orb.o2{width:70px;height:70px;background:#fff;right:8%;bottom:90px;animation-delay:-2s}
+.hero-in{position:relative;z-index:2}
+.brand{font-size:clamp(2.6rem,10vw,4.6rem);line-height:.95;animation:up .9s .2s both}
+.brand small{display:block;font-size:.5em;letter-spacing:1px}
+.pill{display:inline-block;background:var(--y);color:var(--gd);font-weight:700;font-size:.8rem;letter-spacing:2px;padding:5px 18px;border-radius:30px;margin-top:12px;animation:up .9s .45s both,pulse 2.6s 1.5s infinite}
+.tag{margin-top:18px;opacity:.9;font-weight:500;animation:up .9s .65s both}
+.tag b{color:var(--y2)}
+@keyframes up{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+@keyframes float{50%{transform:translateY(-14px) rotate(6deg)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(247,181,0,.6)}50%{box-shadow:0 0 0 12px rgba(247,181,0,0)}}
+.wave{position:absolute;bottom:-1px;left:0;width:100%;height:70px}
+.tabs{position:sticky;top:0;z-index:20;background:rgba(245,251,246,.92);backdrop-filter:blur(10px);display:flex;gap:10px;overflow-x:auto;padding:12px 16px;box-shadow:0 4px 18px rgba(11,90,67,.08);scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;border:2px solid #d5e8dc;background:#fff;color:var(--g);font:600 .85rem Poppins;padding:8px 16px;border-radius:30px;cursor:pointer;transition:.3s}
+.tab.on{background:var(--g);color:#fff;border-color:var(--g);transform:scale(1.06);box-shadow:0 6px 14px rgba(11,90,67,.3)}
+main{max-width:760px;margin:0 auto;padding:10px 16px}
+section{scroll-margin-top:70px;padding-top:24px}
+section h2{font-size:1.7rem;color:var(--g);display:flex;align-items:center;gap:10px;margin-bottom:14px}
+section h2::after{content:"";flex:1;height:3px;border-radius:3px;background:linear-gradient(90deg,var(--y),transparent)}
+.card{display:flex;align-items:center;gap:14px;background:#fff;border:2px solid transparent;border-radius:var(--r);padding:14px 16px;margin-bottom:12px;cursor:pointer;box-shadow:0 4px 16px rgba(11,90,67,.07);transition:transform .3s,border-color .3s,box-shadow .3s,opacity .5s,translate .5s;opacity:0;translate:0 30px}
+.card.show{opacity:1;translate:0 0}
+.card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(11,90,67,.14)}
+.card.sel{border-color:var(--g2);background:linear-gradient(120deg,#fff,#eefaf2)}
+.info{flex:1;min-width:0}
+.nm{font-weight:600;display:flex;align-items:center;gap:8px}
+.dot{width:14px;height:14px;border:2px solid #1c9a50;border-radius:3px;display:inline-grid;place-items:center;flex:none}
+.dot::after{content:"";width:6px;height:6px;border-radius:50%;background:#1c9a50}
+.dot.nv{border-color:#c0392b}.dot.nv::after{background:#c0392b}
+.ds{font-size:.78rem;color:var(--mut);margin-top:2px}
+.pr{font-weight:700;color:var(--g);margin-top:4px}
+.pr::before{content:"₹";color:var(--y);margin-right:1px}
+.side{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.chk{appearance:none;width:28px;height:28px;border:2px solid #b7d3c3;border-radius:9px;background:#fff;cursor:pointer;position:relative;transition:.3s}
+.chk:checked{background:var(--g2);border-color:var(--g2);transform:scale(1.1)}
+.chk::after{content:"";position:absolute;left:8px;top:3px;width:7px;height:13px;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg) scale(0);transition:.25s .05s}
+.chk:checked::after{transform:rotate(45deg) scale(1)}
+.qty{display:flex;align-items:center;gap:8px;background:var(--y);border-radius:30px;padding:0;max-width:0;opacity:0;overflow:hidden;white-space:nowrap;transition:max-width .35s,opacity .35s,padding .35s}
+.card.sel .qty{max-width:110px;opacity:1;padding:4px 8px}
+.qty button{width:26px;height:26px;border:none;border-radius:50%;background:#fff;color:var(--gd);font:700 1rem/1 Poppins;cursor:pointer}
+.qty span{min-width:16px;text-align:center;font-weight:700;color:var(--gd)}
+.bar{position:fixed;left:50%;bottom:18px;transform:translate(-50%,160%);width:min(92%,560px);z-index:30;background:var(--g);color:#fff;border:none;border-radius:60px;padding:14px 22px;display:flex;justify-content:space-between;align-items:center;font:600 1rem Poppins;cursor:pointer;box-shadow:0 12px 30px rgba(7,64,47,.45);transition:transform .5s cubic-bezier(.2,1.3,.4,1)}
+.bar.on{transform:translate(-50%,0)}
+.bar.bump{animation:bump .35s}
+@keyframes bump{50%{transform:translate(-50%,-6px) scale(1.04)}}
+.bar em{font-style:normal;background:var(--y);color:var(--gd);border-radius:30px;padding:6px 16px;font-weight:700}
+.ov{position:fixed;inset:0;background:rgba(7,40,30,.55);z-index:40;opacity:0;pointer-events:none;transition:.35s}
+.ov.on{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:50%;bottom:0;transform:translate(-50%,100%);width:min(100%,600px);max-height:92vh;overflow:auto;background:#fff;border-radius:28px 28px 0 0;z-index:50;padding:22px 22px 28px;transition:transform .5s cubic-bezier(.2,.9,.3,1)}
+.sheet.on{transform:translate(-50%,0)}
+.sheet h3{font-family:"Abril Fatface";font-weight:400;font-size:1.5rem;color:var(--g)}
+.x{position:absolute;right:18px;top:16px;border:none;background:#e9f5ee;color:var(--g);width:34px;height:34px;border-radius:50%;font-size:1.2rem;cursor:pointer}
+.ln{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px dashed #d5e8dc;font-size:.92rem}
+.tot{display:flex;justify-content:space-between;font-weight:700;font-size:1.1rem;color:var(--g);margin:12px 0 16px}
+label{display:block;font-size:.8rem;font-weight:600;color:var(--mut);margin:10px 0 5px}
+input[type=text],textarea{width:100%;padding:13px 15px;border:2px solid #d5e8dc;border-radius:14px;font:500 1rem Poppins;color:var(--ink);outline:none;transition:.25s}
+input:focus,textarea:focus{border-color:var(--g2);box-shadow:0 0 0 4px rgba(18,128,94,.14)}
+input.err{border-color:#d9534f;animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.go{width:100%;margin-top:18px;border:none;border-radius:16px;padding:16px;background:linear-gradient(135deg,var(--y),var(--y2));color:var(--gd);font:700 1.05rem Poppins;cursor:pointer;box-shadow:0 8px 20px rgba(247,181,0,.45);transition:.3s;position:relative;overflow:hidden}
+.go:hover{transform:translateY(-2px)}
+.go::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:rgba(255,255,255,.6);transform:skewX(-20deg);animation:shine 3s infinite}
+@keyframes shine{to{left:130%}}
+.note{font-size:.75rem;color:var(--mut);text-align:center;margin-top:10px}
+.done{position:fixed;inset:0;z-index:60;background:var(--g);color:#fff;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px}
+.done.on{display:flex;animation:up .5s}
+.tick{width:110px;height:110px;border-radius:50%;background:var(--y);display:grid;place-items:center;margin-bottom:20px;animation:pop .7s cubic-bezier(.2,1.6,.4,1)}
+.tick svg{width:56px;stroke:var(--gd);stroke-width:6;fill:none;stroke-linecap:round;stroke-dasharray:60;stroke-dashoffset:60;animation:draw2 .6s .4s forwards}
+@keyframes draw2{to{stroke-dashoffset:0}}
+@keyframes pop{from{transform:scale(0)}}
+.done h2{font-size:2rem}.done p{margin:10px 0 22px;opacity:.9}
+.done button{border:none;border-radius:30px;background:#fff;color:var(--g);font:600 1rem Poppins;padding:12px 28px;cursor:pointer}
+footer{text-align:center;color:var(--mut);font-size:.8rem;padding:30px 16px 0}
+footer a{color:var(--g);font-weight:600;text-decoration:none}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.card{opacity:1;translate:0 0}}
