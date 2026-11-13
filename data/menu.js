@@ -1,15 +1,326 @@
 export const MENU = [
-  { cat: "Breakfast", ico: "🍳", items: [
-    ["Poha", "Light flattened rice with peanuts & lemon", 60, 1],
-    ["Aloo Paratha (2 pcs)", "With curd, butter & pickle", 90, 1],
-    ["Masala Omelette", "Two eggs, onion, chilli, coriander", 80, 0],
-    ["Idli Sambar", "Steamed rice cakes, sambar & chutney", 70, 1],
-  ]},
-  { cat: "Starters", ico: "🥗", items: [
-    ["Paneer Tikka", "Smoky tandoori cottage cheese", 220, 1],
-    ["Veg Manchurian", "Crispy veg balls in spicy sauce", 180, 1],
-    ["Chicken 65", "Spicy fried chicken bites", 260, 0],
-    ["Crispy Corn", "Golden corn tossed with spices", 160, 1],
-  ]},
-  // add rest of your categories...
+  {
+    cat: "Soups",
+    ico: "🍲",
+    note: "@ 200ml",
+    items: [
+      ["Cream of Tomato Soup", "Classic creamy tomato soup", 110, 1],
+      ["Veg. Hot & Sour Soup", "Tangy & spicy veg soup", 110, 1],
+      ["Veg. Manchow Soup", "Indo-Chinese style veg soup", 120, 1],
+      ["Lemon Coriander Soup", "Light & refreshing lemon herb soup", 130, 1],
+    ],
+  },
+  {
+    cat: "Papad / Fries",
+    ico: "🥨",
+    note: "@ Per Piece",
+    items: [
+      ["Roasted Papad", "Crispy roasted papad", 20, 1],
+      ["Masala Papad", "Spiced papad with toppings", 40, 1],
+      ["Cheese Masala Papad", "Papad with cheese & masala", 55, 1],
+    ],
+  },
+  {
+    cat: "Sizzling Sizzler",
+    ico: "🔥",
+    note: "@ 500gms",
+    items: [
+      ["Veg. Sizzler", "Classic vegetable sizzler", 330, 1],
+      ["Chinese Sizzler", "Indo-Chinese style sizzler", 350, 1],
+      ["Paneer Stick Sizzler", "Cottage cheese stick sizzler", 360, 1],
+    ],
+  },
+  {
+    cat: "Raita / Salad",
+    ico: "🥗",
+    note: "@ 200gms",
+    items: [
+      ["Veg. Raita", "Fresh vegetable raita", 80, 1],
+      ["Boondi Raita", "Classic boondi in yogurt", 80, 1],
+      ["Pineapple Raita", "Sweet pineapple yogurt", 100, 1],
+      ["Green Salad", "Fresh garden salad", 70, 1],
+      ["Kachumber Salad", "Chopped onion tomato cucumber salad", 70, 1],
+    ],
+  },
+  {
+    cat: "Tandoori Starter",
+    ico: "🍢",
+    note: "@ 250gms",
+    items: [
+      ["Paneer Tikka Dry", "Classic smoky tandoori paneer", 240, 1],
+      ["Paneer Afghani Tikka Dry", "Rich creamy afghani style paneer", 250, 1],
+      ["Paneer Peri Peri Tikka Dry", "Spicy peri peri paneer tikka 🌶️", 250, 1],
+    ],
+  },
+  {
+    cat: "Soya Chap",
+    ico: "🌿",
+    note: "@ 250gms",
+    items: [
+      ["Soya Tikka Chap", "Marinated soya chap tikka", 200, 1],
+      ["Soya Malai Tikka Chap", "Creamy malai soya chap", 220, 1],
+      ["Soya Chap Platter", "Assorted soya chap (4 items - 3 pcs each)", 280, 1],
+    ],
+  },
+  {
+    cat: "Indian Starter",
+    ico: "🫕",
+    note: "@ 250gms",
+    items: [
+      ["Hara Bhara Kabab", "Green veggie & paneer kabab", 210, 1],
+      ["Veg. Seekh Kabab", "Spiced veg seekh kabab", 210, 1],
+    ],
+  },
+  {
+    cat: "Chinese Starter",
+    ico: "🥢",
+    note: "@ 250gms",
+    items: [
+      ["Paneer Chilly (Dry/Gravy)", "Classic paneer chilly", 230, 1],
+      ["Veg. Manchurian (Dry/Gravy)", "Crispy veg balls in sauce", 170, 1],
+      ["Veg. Lolipop", "Shaped veg lolipops in sauce", 200, 1],
+      ["Dragon Potato", "Spicy crispy dragon potato", 200, 1],
+      ["Veg. Spring Roll", "Crispy stuffed veg spring roll", 200, 1],
+    ],
+  },
+  {
+    cat: "Continental Starter",
+    ico: "🧀",
+    note: "@ 250gms",
+    items: [
+      ["Cheese Corn Ball", "Cheesy crispy corn balls", 280, 1],
+      ["Cheese Bullet Roll", "Cheese stuffed bullet rolls", 280, 1],
+      ["Cottage Spinach Dry", "Paneer & spinach starter", 270, 1],
+    ],
+  },
+  {
+    cat: "Fresh Veg Tadka",
+    ico: "🥘",
+    note: "@ 300gms",
+    items: [
+      ["Sev Tomato", "Tangy sev tomato sabzi", 170, 1],
+      ["Chana Masala", "Spiced chickpea curry", 170, 1],
+      ["Mix. Veg.", "Mixed vegetable curry", 170, 1],
+      ["Mushroom Masala", "Spiced mushroom curry", 220, 1],
+      ["Veg. Makhanwala", "Rich buttery veg gravy", 190, 1],
+      ["Veg. Maharaja", "Royal mixed vegetable sabzi", 230, 1],
+    ],
+  },
+  {
+    cat: "Paneer Ka Zayka",
+    ico: "🧆",
+    note: "@ 300gms",
+    items: [
+      ["Mutter Paneer", "Peas & cottage cheese curry", 190, 1],
+      ["Palak Paneer", "Spinach & paneer gravy", 190, 1],
+      ["Paneer Butter Masala", "Rich buttery paneer gravy", 210, 1],
+      ["Paneer Tikka Masala", "Tandoori paneer in masala gravy", 220, 1],
+      ["Paneer Lababdar", "Smooth tomato paneer gravy", 210, 1],
+      ["Paneer Angara 🌶️", "Smoky spicy paneer", 240, 1],
+      ["Paneer Jwalamukhi 🌶️", "Fiery paneer in bold gravy", 240, 1],
+    ],
+  },
+  {
+    cat: "Varieties of Kofta",
+    ico: "🫧",
+    note: "@ 300gms",
+    items: [
+      ["Veg. Kofta", "Classic veg kofta curry", 170, 1],
+      ["Malai Kofta", "Soft kofta in creamy gravy", 180, 1],
+      ["Paneer Kofta", "Paneer stuffed kofta", 200, 1],
+    ],
+  },
+  {
+    cat: "Varieties of Aloo",
+    ico: "🥔",
+    note: "@ 300gms",
+    items: [
+      ["Jeera Aloo", "Cumin tempered potato", 140, 1],
+      ["Aloo Mutter", "Potato & peas curry", 160, 1],
+      ["Punjabi Dum Aloo", "Slow cooked spiced aloo", 180, 1],
+    ],
+  },
+  {
+    cat: "Kathiyawadi",
+    ico: "🌾",
+    note: "@ 300gms",
+    items: [
+      ["Desi Chana Masala", "Rustic Gujarati chana", 170, 1],
+      ["Sev Dungari", "Sev with onion Kathiyawadi style", 180, 1],
+      ["Dahi Tikhari", "Yogurt based Kathiyawadi dish", 160, 1],
+      ["Vagharelo Rotlo", "Seasoned millet rotlo", 170, 1],
+    ],
+  },
+  {
+    cat: "Varieties of Kaju / Cheese",
+    ico: "💎",
+    note: "@ 300gms",
+    items: [
+      ["Kaju Curry", "Cashew nut curry", 230, 1],
+      ["Kaju Masala", "Spiced cashew gravy", 240, 1],
+      ["Kaju Paneer Masala", "Cashew & paneer masala", 250, 1],
+      ["Cheese Butter Masala", "Rich cheesy butter masala", 230, 1],
+      ["Cheese Angara 🌶️", "Smoky spicy cheese gravy", 260, 1],
+    ],
+  },
+  {
+    cat: "Varieties of Dal",
+    ico: "🫘",
+    note: "@ 300gms",
+    items: [
+      ["Dal Fry", "Classic tempered dal", 130, 1],
+      ["Dal Tadka", "Dal with smoky tadka", 150, 1],
+      ["Dal Makhani", "Slow cooked creamy black dal", 170, 1],
+    ],
+  },
+  {
+    cat: "Varieties of Rice",
+    ico: "🍚",
+    note: "@ 300gms",
+    items: [
+      ["Steam Rice", "Plain steamed basmati rice", 90, 1],
+      ["Jeera Rice", "Cumin tempered rice", 110, 1],
+      ["Veg. Biryani", "Spiced vegetable biryani", 150, 1],
+      ["Veg. Dum Biryani", "Slow dum cooked veg biryani", 160, 1],
+      ["Paneer Pulav", "Cottage cheese pulav", 160, 1],
+    ],
+  },
+  {
+    cat: "Indian Bread",
+    ico: "🫓",
+    note: "@ Per Piece",
+    items: [
+      ["Plain Chapati", "Soft whole wheat chapati", 16, 1],
+      ["Butter Chapati", "Chapati with butter", 20, 1],
+      ["Tandoori Butter Roti", "Tandoor baked butter roti", 25, 1],
+      ["Lachha Butter Paratha", "Layered buttery paratha", 60, 1],
+      ["Aloo Paratha With Curd", "Stuffed aloo paratha with curd", 110, 1],
+      ["Paneer Paratha With Curd", "Paneer stuffed paratha with curd", 150, 1],
+      ["Butter Naan", "Soft butter naan", 60, 1],
+      ["Garlic Naan", "Garlic flavoured naan", 80, 1],
+      ["Cheese Garlic Naan", "Naan with cheese & garlic", 110, 1],
+    ],
+  },
+  {
+    cat: "Chinese",
+    ico: "🍜",
+    note: "@ 300gms",
+    items: [
+      ["Veg. Hakka Noodles", "Stir fried veg noodles", 170, 1],
+      ["Veg. Schezwan Noodles 🌶️", "Spicy schezwan noodles", 190, 1],
+      ["American Chopsuey", "Crispy noodles in sweet sauce", 190, 1],
+      ["Veg. Fried Rice", "Stir fried veg rice", 160, 1],
+      ["Schezwan Fried Rice 🌶️", "Spicy schezwan fried rice", 190, 1],
+      ["Triple Fried Rice", "Three flavour fried rice", 200, 1],
+    ],
+  },
+  {
+    cat: "Mojito",
+    ico: "🍹",
+    items: [
+      ["Blue Heaven Mojito", "Cool blue mojito with mint", 99, 1],
+      ["Mint Mojito", "Fresh mint & lime mojito", 99, 1],
+      ["Surprise Mojito", "Chef's surprise mojito blend", 99, 1],
+      ["Peach Mojito", "Sweet peachy mojito", 99, 1],
+    ],
+  },
+  {
+    cat: "Ice Tea",
+    ico: "🧊",
+    items: [
+      ["Lemon Ice Tea", "Chilled lemon infused ice tea", 99, 1],
+      ["American Ice Tea", "Classic American style ice tea", 99, 1],
+    ],
+  },
+  {
+    cat: "Milkshake",
+    ico: "🥤",
+    items: [
+      ["Oreo Chocolate Shake", "Oreo blended chocolate shake", 109, 1],
+      ["Kitkat Chocolate Shake", "Kitkat blended chocolate shake", 119, 1],
+      ["Strawberry Shake", "Fresh strawberry milkshake", 99, 1],
+      ["Cold Coffee", "Chilled blended cold coffee", 99, 1],
+    ],
+  },
+  {
+    cat: "Garlic Bread",
+    ico: "🥖",
+    items: [
+      ["Cheese Garlic Bread", "Classic cheesy garlic bread", 89, 1],
+      ["Supreme Treat Garlic Bread", "Loaded garlic bread with toppings", 99, 1],
+      ["Paneer Toofani Garlic Bread", "Spicy paneer garlic bread", 119, 1],
+    ],
+  },
+  {
+    cat: "Pasta",
+    ico: "🍝",
+    items: [
+      ["White Sauce Pasta", "Creamy bechamel pasta", 169, 1],
+      ["Red Sauce Pasta", "Classic tomato red sauce pasta", 169, 1],
+      ["Peri Peri Pasta", "Spicy peri peri pasta 🌶️", 169, 1],
+    ],
+  },
+  {
+    cat: "Sandwich",
+    ico: "🥪",
+    note: "@ Per Plate",
+    items: [
+      ["Veg Mexican Sandwich", "Mexican spiced veg sandwich", 139, 1],
+      ["Paneer Maharaja Sandwich", "Loaded paneer royal sandwich", 149, 1],
+    ],
+  },
+  {
+    cat: "Momo",
+    ico: "🥟",
+    items: [
+      ["Steam Momo", "Soft steamed veg momos", 89, 1],
+      ["Fried Momo", "Crispy fried veg momos", 89, 1],
+      ["Cheese Melting Gravy Momo", "Momos in cheesy gravy sauce", 159, 1],
+    ],
+  },
+  {
+    cat: "Pizza",
+    ico: "🍕",
+    items: [
+      ["Margherita Pizza", "Classic tomato & cheese pizza", 109, 1],
+      ["Four Cheese Pizza", "Loaded four cheese pizza", 199, 1],
+      ["The Xplod Pizza", "Chef's special loaded pizza", 189, 1],
+      ["Paneer BBQ Pizza", "Smoky BBQ paneer pizza", 199, 1],
+      ["Veg Exotica Pizza", "Exotic veg loaded pizza", 179, 1],
+    ],
+  },
+  {
+    cat: "Wraps / Frankie",
+    ico: "🌯",
+    items: [
+      ["Mexican Salsa Wrap", "Spiced Mexican veg wrap", 129, 1],
+      ["Grilled Paneer Wrap", "Juicy grilled paneer wrap", 149, 1],
+    ],
+  },
+  {
+    cat: "Fries",
+    ico: "🍟",
+    items: [
+      ["Crispy Fries", "Salted or Peri Peri option", 99, 1],
+      ["Italian Fries", "Herb seasoned Italian fries", 149, 1],
+    ],
+  },
+  {
+    cat: "Burger",
+    ico: "🍔",
+    items: [
+      ["Classic OG Burger", "Simple classic veg burger", 69, 1],
+      ["Mexican King Burger", "Spiced Mexican style burger", 99, 1],
+      ["Royal Paneer Grilled Burger", "Juicy grilled paneer burger", 149, 1],
+    ],
+  },
+  {
+    cat: "Ice Cream & Desserts",
+    ico: "🍨",
+    items: [
+      ["Gulab Jamun (2 Piece)", "Soft gulab jamun", 40, 1],
+      ["Gulab Jamun With Ice Cream", "Gulab jamun with vanilla ice cream", 80, 1],
+      ["Vanilla With Chocolate Sauce", "Vanilla ice cream with choco sauce", 90, 1],
+    ],
+  },
 ];

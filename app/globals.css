@@ -21,10 +21,10 @@ h1,h2,.brand{font-family:"Abril Fatface",Georgia,serif;font-weight:400}
 @keyframes float{50%{transform:translateY(-14px) rotate(6deg)}}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(247,181,0,.6)}50%{box-shadow:0 0 0 12px rgba(247,181,0,0)}}
 .wave{position:absolute;bottom:-1px;left:0;width:100%;height:70px}
-.tabs{position:sticky;top:0;z-index:20;background:rgba(245,251,246,.92);backdrop-filter:blur(10px);display:flex;gap:10px;overflow-x:auto;padding:12px 16px;box-shadow:0 4px 18px rgba(11,90,67,.08);scrollbar-width:none}
-.tabs::-webkit-scrollbar{display:none}
-.tab{flex:none;border:2px solid #d5e8dc;background:#fff;color:var(--g);font:600 .85rem Poppins;padding:8px 16px;border-radius:30px;cursor:pointer;transition:.3s}
-.tab.on{background:var(--g);color:#fff;border-color:var(--g);transform:scale(1.06);box-shadow:0 6px 14px rgba(11,90,67,.3)}
+
+
+
+
 main{max-width:760px;margin:0 auto;padding:10px 16px}
 section{scroll-margin-top:70px;padding-top:24px}
 section h2{font-size:1.7rem;color:var(--g);display:flex;align-items:center;gap:10px;margin-bottom:14px}
@@ -84,3 +84,22 @@ input.err{border-color:#d9534f;animation:shake .35s}
 footer{text-align:center;color:var(--mut);font-size:.8rem;padding:30px 16px 0}
 footer a{color:var(--g);font-weight:600;text-decoration:none}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.card{opacity:1;translate:0 0}}
+/* ── Sticky category bar ── */
+.catbar{position:sticky;top:0;z-index:20;background:rgba(245,251,246,.95);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:space-between;padding:10px 16px;box-shadow:0 4px 18px rgba(11,90,67,.08);gap:10px}
+.catbar-current{font:600 .95rem Poppins;color:var(--g);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.catbar-btn{flex:none;border:2px solid var(--g);background:#fff;color:var(--g);font:600 .85rem Poppins;padding:8px 16px;border-radius:30px;cursor:pointer;transition:.2s;white-space:nowrap}
+.catbar-btn:hover{background:var(--g);color:#fff}
+
+/* ── Category picker modal ── */
+.picker{position:fixed;left:50%;bottom:0;transform:translate(-50%,100%);width:min(100%,600px);max-height:88vh;overflow:auto;background:#fff;border-radius:28px 28px 0 0;z-index:50;padding:0 0 32px;transition:transform .45s cubic-bezier(.2,.9,.3,1)}
+.picker.on{transform:translate(-50%,0)}
+.picker-head{position:sticky;top:0;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:18px 20px 14px;border-bottom:2px solid #eef5f1;font:700 1.1rem Poppins;color:var(--g)}
+.picker-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:16px}
+.pcat{display:flex;flex-direction:column;align-items:center;gap:6px;border:2px solid #d5e8dc;border-radius:16px;background:#fff;padding:14px 8px;cursor:pointer;transition:.2s;text-align:center}
+.pcat:hover{border-color:var(--g2);background:#eefaf2}
+.pcat.pcat-on{border-color:var(--g);background:linear-gradient(135deg,#eefaf2,#fff);box-shadow:0 4px 12px rgba(11,90,67,.15)}
+.pcat-ico{font-size:1.6rem;line-height:1}
+.pcat-label{font:600 .72rem Poppins;color:var(--ink);line-height:1.2}
+
+/* ── Category section note ── */
+.catnote{font-family:Poppins,sans-serif;font-size:.7rem;font-weight:500;color:var(--mut);background:#eef5f1;padding:3px 10px;border-radius:20px;margin-left:8px}

@@ -45,9 +45,7 @@ try {
 
 } catch (err) {
   console.error(err);
-  // Don't show alert — check console instead
-  // Message may have already been sent
-  onDone(); // ← still show success screen
+  alert('Network error. Your order was NOT sent. Please try again or call reception.');
 } finally {
   setLoading(false);
 }
@@ -99,8 +97,8 @@ try {
         placeholder="Less spicy, no onion…"
       />
 
-      <button className="go" onClick={handleSubmit}>
-        Send Order on WhatsApp
+      <button className="go" onClick={handleSubmit} disabled={loading}>
+        {loading ? 'Sending Order…' : 'Send Order to Reception'}
       </button>
       <p className="note">Your order goes directly to reception.</p>
     </div>
