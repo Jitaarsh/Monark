@@ -207,8 +207,13 @@ export default function Home() {
             type="checkbox"
             className="chk"
             checked={selected}
-            onChange={() => { }}
-            onClick={e => e.stopPropagation()}
+            onChange={e => {
+              setQ(id, e.target.checked ? 1 : 0);
+            }}
+            onClick={e => {
+              e.stopPropagation();
+              setQ(id, selected ? 0 : 1);
+            }}
             aria-label={`Select ${it[0]}`}
           />
           <div
