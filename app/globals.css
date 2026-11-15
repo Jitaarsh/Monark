@@ -1097,20 +1097,16 @@ input.err {
   from { transform: scale(0); }
 }
 
-.done h2 {
-  font-size: 2rem;
-}
-
-.done p {
-  margin: 10px 0 24px;
-  opacity: 0.9;
-  line-height: 1.6;
-}
-
-.done-msg {
-  margin: 10px 0 24px;
-  opacity: 0.9;
-  line-height: 1.6;
+.done-title {
+  font-family: Poppins, system-ui, sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.4rem, 5vw, 1.95rem);
+  line-height: 1.35;
+  color: #fff;
+  max-width: 440px;
+  margin: 16px auto 26px;
+  text-wrap: balance;
+  text-align: center;
 }
 
 /* ── Call Reception Button ── */

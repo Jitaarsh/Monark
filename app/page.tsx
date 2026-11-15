@@ -614,11 +614,9 @@ export default function Home() {
               <path d="M12 27l10 10 19-21" stroke="#07402f" strokeWidth="6" fill="none" strokeLinecap="round" />
             </svg>
           </div>
-          <h2>Order Placed!</h2>
-          <p className="done-msg">
-            Your order is on its way to reception!<br />
-            <strong>Please call reception to confirm your order.</strong>
-          </p>
+          <h2 className="done-title">
+            Please call reception to confirm your order.
+          </h2>
           <a
             href="tel:+918980010026"
             className="call-btn"
