@@ -23,6 +23,7 @@ export default function OrderSheet({ cart, items, total, onClose, onDone }) {
       note: note.trim(),
       total,
       items: Object.keys(cart).map(id => ({
+        id,
         name: items[id].name,
         qty: cart[id],
         price: items[id].price,
