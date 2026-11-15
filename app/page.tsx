@@ -34,8 +34,8 @@ export default function Home() {
     activeSection === 'breakfast'
       ? breakfastCategories
       : activeSection === 'fastfood'
-      ? fastFoodCategories
-      : mainCategories;
+        ? fastFoodCategories
+        : mainCategories;
 
   const items = useMemo(() => {
     const map: Record<string, CartItem> = {};
@@ -174,8 +174,8 @@ export default function Home() {
       sec === 'breakfast'
         ? breakfastCategories
         : sec === 'fastfood'
-        ? fastFoodCategories
-        : mainCategories;
+          ? fastFoodCategories
+          : mainCategories;
     if (targetCats.length > 0) {
       setActiveTab(targetCats[0].originalIndex);
     }
@@ -333,15 +333,23 @@ export default function Home() {
         <svg className="arches" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice">
           <path d="M30 300V120a45 45 0 0 1 90 0V300M75 300V80M120 300V190a60 60 0 0 1 120 0V300M280 300V90a40 40 0 0 1 80 0V300M320 300V60" />
         </svg>
-        <div className="orb o1">
-          <Image src="/logo-left.png" alt="Hotel Monark Emblem (Left)" width={66} height={66} priority />
-        </div>
-        <div className="orb o2">
-          <Image src="/logo-right.png" alt="Hotel Monark Emblem (Right)" width={56} height={56} priority />
-        </div>
         <div className="hero-in">
-          <div className="brand"><small>Hotel</small>Monark</div>
-          <div className="pill">AC ROOMS</div>
+          <div className="brand-logo-wrap">
+            <div className="orb o1" aria-hidden="true">
+              <Image src="/logo-left.png" alt="Hotel Monark Emblem (Left)" width={54} height={54} priority />
+            </div>
+            <Image
+              src="/logo-monark.png"
+              alt="Hotel Monark - AC Rooms"
+              width={310}
+              height={147}
+              priority
+              className="brand-logo-img"
+            />
+            <div className="orb o2" aria-hidden="true">
+              <Image src="/logo-right.png" alt="Hotel Monark Emblem (Right)" width={46} height={46} priority />
+            </div>
+          </div>
           <p className="tag">In-Room Dining · Pick your dishes, we <b>deliver to your room</b></p>
         </div>
         <svg className="wave" viewBox="0 0 1440 70" preserveAspectRatio="none">
@@ -472,13 +480,12 @@ export default function Home() {
                 {filteredItems.map(item =>
                   renderCard(item.id, item.raw, {
                     ico: item.catIco,
-                    name: `${
-                      item.section === 'breakfast'
-                        ? '🌅 Breakfast'
-                        : item.section === 'fastfood'
+                    name: `${item.section === 'breakfast'
+                      ? '🌅 Breakfast'
+                      : item.section === 'fastfood'
                         ? '🍔 Fast Food'
                         : '🍽️ Main'
-                    } · ${item.catName}`,
+                      } · ${item.catName}`,
                     section: item.section,
                   })
                 )}
@@ -608,8 +615,19 @@ export default function Home() {
             </svg>
           </div>
           <h2>Order Placed!</h2>
-          <p>Your order has been sent to reception.<br />We&apos;ll deliver to your room shortly.</p>
-          <button onClick={handleAgain}>Back to Menu</button>
+          <p className="done-msg">
+            Your order is on its way to reception!<br />
+            <strong>Please call reception to confirm your order.</strong>
+          </p>
+          <a
+            href="tel:+918980010026"
+            className="call-btn"
+            aria-label="Call Reception to confirm your order"
+          >
+            <span className="call-icon">📞</span>
+            <span>Call Reception</span>
+          </a>
+          <button className="done-back" onClick={handleAgain}>Back to Menu</button>
         </div>
       )}
     </>

@@ -79,9 +79,9 @@ export async function POST(req) {
   }
 
   if ((!breakfastLines.length && !fastFoodLines.length && !mainLines.length) ||
-      typeof name !== 'string' || !name.trim() ||
-      typeof room !== 'string' || !room.trim() ||
-      typeof phone !== 'string' || !phone.trim()) {
+    typeof name !== 'string' || !name.trim() ||
+    typeof room !== 'string' || !room.trim() ||
+    typeof phone !== 'string' || !phone.trim()) {
     return NextResponse.json({ success: false }, { status: 400 });
   }
 
@@ -118,9 +118,11 @@ export async function POST(req) {
   if (typeof note === 'string' && note.trim()) {
     msg += `\n📝 Note: ${note.trim()}`;
   }
-
   try {
-    await sendTelegramMessage(msg);
+    await Promise.all([
+      sendTelegramMessage(process.env.TG_CHAT_ID, msg),
+      sendTelegramMessage(process.env.TG_CHAT_ID_2, msg),
+    ]);
     return NextResponse.json({ success: true });
   } catch (err) {
     const error = err instanceof Error ? err.message : String(err);
