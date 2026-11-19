@@ -136,6 +136,105 @@ h1, h2, .brand {
   color: var(--y2);
 }
 
+/* ── Hero Notice Banner ── */
+.hero-notice-banner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin-top: 14px;
+  padding: 8px 18px;
+  background: rgba(0, 0, 0, 0.24);
+  border: 1px solid rgba(247, 181, 0, 0.45);
+  border-radius: 30px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #fff;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  animation: up 0.9s 0.8s both;
+}
+
+.hero-notice-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hero-notice-icon {
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.hero-notice-sep {
+  opacity: 0.5;
+  font-weight: 700;
+}
+
+/* ── Menu Top Info Banner ── */
+.menu-info-banner {
+  max-width: 900px;
+  margin: 0 auto 18px;
+  background: #fff8eb;
+  border: 1px solid #fed7aa;
+  border-left: 4px solid var(--orange);
+  border-radius: 12px;
+  padding: 10px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #9a3412;
+  box-shadow: 0 2px 8px rgba(242, 129, 0, 0.08);
+}
+
+.info-banner-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.info-icon {
+  font-size: 0.95rem;
+}
+
+.info-sep {
+  color: #fdba74;
+  font-weight: 400;
+}
+
+/* ── Order Sheet Notice Box ── */
+.sheet-notice-box {
+  margin: 14px 0 16px;
+  padding: 10px 14px;
+  background: #fff7ed;
+  border: 1px solid #ffedd5;
+  border-left: 3.5px solid var(--orange);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sheet-notice-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #9a3412;
+  line-height: 1.35;
+}
+
+.sheet-notice-icon {
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
 @keyframes up {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: none; }
@@ -1371,5 +1470,26 @@ footer a {
   .card-opt-btn {
     padding: 4px 9px;
     font-size: 0.78rem;
+  }
+  .hero-notice-banner {
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 14px;
+    font-size: 0.74rem;
+    border-radius: 18px;
+  }
+  .hero-notice-sep {
+    display: none;
+  }
+  .menu-info-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    padding: 10px 14px;
+    font-size: 0.78rem;
+    margin: 0 12px 14px;
+  }
+  .info-sep {
+    display: none;
   }
 }

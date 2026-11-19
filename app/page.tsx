@@ -351,6 +351,18 @@ export default function Home() {
             </div>
           </div>
           <p className="tag">In-Room Dining · Pick your dishes, we <b>deliver to your room</b></p>
+
+          <div className="hero-notice-banner">
+            <div className="hero-notice-item">
+              <span className="hero-notice-icon">⚠️</span>
+              <span>Order will be accepted if it&apos;s available</span>
+            </div>
+            <span className="hero-notice-sep">·</span>
+            <div className="hero-notice-item">
+              <span className="hero-notice-icon">⏰</span>
+              <span>After 11:30 PM food cannot be ordered</span>
+            </div>
+          </div>
         </div>
         <svg className="wave" viewBox="0 0 1440 70" preserveAspectRatio="none">
           <path fill="#f5fbf6" d="M0 40C240 80 480 0 720 30s480 40 720 0v40H0z" />
@@ -454,6 +466,18 @@ export default function Home() {
 
       {/* MENU */}
       <main id="menu">
+        <div className="menu-info-banner">
+          <div className="info-banner-item">
+            <span className="info-icon">⚠️</span>
+            <span>Order will be accepted if it&apos;s available</span>
+          </div>
+          <span className="info-sep">|</span>
+          <div className="info-banner-item">
+            <span className="info-icon">⏰</span>
+            <span>After 11:30 PM food cannot be ordered</span>
+          </div>
+        </div>
+
         {searchQuery.trim() ? (
           <section className="search-results-section">
             <div className="search-header-box">

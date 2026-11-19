@@ -110,6 +110,17 @@ export default function OrderSheet({ cart, items, total, onClose, onDone }) {
         placeholder="Less spicy, no onion…"
       />
 
+      <div className="sheet-notice-box">
+        <div className="sheet-notice-row">
+          <span className="sheet-notice-icon">⚠️</span>
+          <span>Order will be accepted if it&apos;s available</span>
+        </div>
+        <div className="sheet-notice-row">
+          <span className="sheet-notice-icon">⏰</span>
+          <span>After 11:30 PM food cannot be ordered</span>
+        </div>
+      </div>
+
       <button className="go" onClick={handleSubmit} disabled={loading}>
         {loading ? 'Sending Order…' : 'Send Order to Reception'}
       </button>
