@@ -847,12 +847,6 @@ export const MENU = [
         "300 gms",
         330,
         1
-      ],
-      [
-        "Veg. Satluj Sp.",
-        "300 gms",
-        350,
-        1
       ]
     ]
   },
